@@ -1,0 +1,26 @@
+{
+  "name": "enhanced_elemui",
+  "version": "1.0.0",
+  "description": "1. This is a pligin which used in vue framework. 2. an enhanced components library which based on Element-UI.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Samuel2306/Enhanced_ElemUI.git"
+  },
+  "keywords": [
+    "vue",
+    "Element-UI",
+    "plugin",
+    "node",
+    "componnet"
+  ],
+  "author": "Samuel2306",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Samuel2306/Enhanced_ElemUI/issues"
+  },
+  "homepage": "https://github.com/Samuel2306/Enhanced_ElemUI#readme"
+}
