@@ -1,5 +1,5 @@
 {
-  "name": "enhanced_elemui",
+  "name": "enhanced-elemui",
   "version": "1.0.0",
   "description": "1. This is a pligin which used in vue framework. 2. an enhanced components library which based on Element-UI.",
   "main": "dist/main.js",
