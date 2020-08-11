@@ -2,10 +2,11 @@ const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
-  entry: ['babel-polyfill', './src/index'],
+  entry: ['./src/index'],  // 'babel-polyfill',
   output:{
     filename:'main.js',    //输入的文件名是什么，生成的文件名也是什么
-    path:path.resolve(__dirname,'./dist') //指定生成的文件目录
+    path:path.resolve(__dirname,'./dist'), //指定生成的文件目录
+    libraryTarget: "commonjs2"
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
