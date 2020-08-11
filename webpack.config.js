@@ -1,6 +1,17 @@
 const path = require('path')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 module.exports = {
+  entry: ['babel-polyfill', './src/index'],
+  output:{
+    filename:'main.js',    //输入的文件名是什么，生成的文件名也是什么
+    path:path.resolve(__dirname,'./dist') //指定生成的文件目录
+  },
+  resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    alias: {
+      '@': path.resolve('src'),
+    }
+  },
   module: {
     rules: [
       {
@@ -14,11 +25,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude:path.resolve(__dirname, '/node_modules'),
-        include:path.resolve(__dirname, '/src'),
-        options: {
-          presets: ['env']
-        }
+        exclude: path.resolve(__dirname, '/node_modules')
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -35,6 +42,10 @@ module.exports = {
           limit: 10000,
           name: '[name].[hash:7].[ext]'
         }
+      },
+      {
+        test: /\.css$/,
+        loaders: ["style-loader", "css-loader"]
       },
       {
         test: /\.scss$/,
