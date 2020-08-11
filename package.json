@@ -2,9 +2,12 @@
   "name": "enhanced_elemui",
   "version": "1.0.0",
   "description": "1. This is a pligin which used in vue framework. 2. an enhanced components library which based on Element-UI.",
-  "main": "lib/index.js",
+  "main": "dist/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --mode development --open",
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -22,5 +25,22 @@
   "bugs": {
     "url": "https://github.com/Samuel2306/Enhanced_ElemUI/issues"
   },
-  "homepage": "https://github.com/Samuel2306/Enhanced_ElemUI#readme"
+  "homepage": "https://github.com/Samuel2306/Enhanced_ElemUI#readme",
+  "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "babel-loader": "^8.1.0",
+    "babel-preset-env": "^1.7.0",
+    "css-loader": "^4.2.1",
+    "json-loader": "^0.5.7",
+    "sass-loader": "^9.0.3",
+    "style-loader": "^1.2.1",
+    "url-loader": "^4.1.0",
+    "vue-template-compiler": "^2.6.11",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "vue-loader": "^15.9.3"
+  }
 }
