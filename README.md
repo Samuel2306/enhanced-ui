@@ -1,8 +1,18 @@
-# Enhanced_ElemUI
-1. This is a pligin which used in vue framework.
-2. an enhanced components library which based on Element-UI.
+# enhanced-elemui
 
-# usage
-1. install：npm i Enhanced_ElemUI --save
-2. import module into project： Vue.use(Enhanced_ElemUI)
+> A Vue.js project
 
+## Build Setup
+
+``` bash
+# install dependencies
+npm install
+
+# serve with hot reload at localhost:8080
+npm run dev
+
+# build for production with minification
+npm run build
+```
+
+For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).

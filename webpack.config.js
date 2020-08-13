@@ -1,69 +1,123 @@
-const path = require('path')
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+var path = require('path')
+var webpack = require('webpack')
+const NODE_ENV = process.env.NODE_ENV
 
 module.exports = {
-  entry: ['./src/index'],  // 'babel-polyfill',
-  output:{
-    filename:'main.js',    //输入的文件名是什么，生成的文件名也是什么
-    path:path.resolve(__dirname,'./dist'), //指定生成的文件目录
-    libraryTarget: "commonjs2"
-  },
-  resolve: {
-    extensions: ['.js', '.vue', '.json'],
-    alias: {
-      '@': path.resolve('src'),
-    }
+  entry: NODE_ENV == 'development' ? './src/main.js' : './index.js',
+  output: {
+    path: path.resolve(__dirname, './dist'),
+    publicPath: '/dist/',
+    filename: 'build.js',
+    library: 'enhanced-ui',
+    libraryTarget: 'umd',
+    umdNamedDefine: true
   },
   module: {
     rules: [
       {
-        test: /\.vue$/,
-        loader: 'vue-loader',
+        test: /\.css$/,
+        use: [
+          'vue-style-loader',
+          'css-loader'
+        ],
       },
       {
-        test: /\.json$/,
-        use: 'json-loader'
+        test: /\.scss$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'sass-loader'
+        ],
+      },
+      {
+        test: /\.sass$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'sass-loader?indentedSyntax'
+        ],
+      },
+      {
+        test: /\.vue$/,
+        loader: 'vue-loader',
+        options: {
+          loaders: {
+            // Since sass-loader (weirdly) has SCSS as its default parse mode, we map
+            // the "scss" and "sass" values for the lang attribute to the right configs here.
+            // other preprocessors should work out of the box, no loader config like this necessary.
+            'scss': [
+              'vue-style-loader',
+              'css-loader',
+              'sass-loader'
+            ],
+            'sass': [
+              'vue-style-loader',
+              'css-loader',
+              'sass-loader?indentedSyntax'
+            ]
+          }
+          // other vue-loader options go here
+        }
       },
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: path.resolve(__dirname, '/node_modules')
+        exclude: /node_modules/
       },
       {
-        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        test: /\.(png|jpg|gif|svg)$/,
         loader: 'url-loader',
         options: {
-          limit: 10000,
-          name: '[name].[hash:7].[ext]'
+          name: '[name].[ext]?[hash]',
+          limit: 99999
         }
       },
       {
-        test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+        test: /\.(svg|ttf|eot|woff|woff2)$/,
         loader: 'url-loader',
-        options: {
-          limit: 10000,
-          name: '[name].[hash:7].[ext]'
-        }
-      },
-      {
-        test: /\.css$/,
-        loaders: ["style-loader", "css-loader"]
-      },
-      {
-        test: /\.scss$/,
-        loaders: ["style-loader", "css-loader", "sass-loader"]
-      },
-      {
-        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-        loader: 'url-loader',
-        options: {
-          limit: 10000,
-          name: '[name].[hash:7].[ext]'
+        options:{
+          name:'[name].[ext]',
+          limit: 9999999
         }
       }
     ]
   },
-  plugins: [
-    new VueLoaderPlugin()
-  ]
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js'
+    },
+    extensions: ['*', '.js', '.vue', '.json']
+  },
+  devServer: {
+    historyApiFallback: true,
+    noInfo: true,
+    overlay: true
+  },
+  performance: {
+    hints: false
+  },
+  // devtool: '#eval-source-map'
+}
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports.devtool = '#source-map'
+  // http://vue-loader.vuejs.org/en/workflow/production.html
+  module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"production"'
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      compress: {
+        warnings: false
+      }
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    })
+  ])
+}else{
+  module.exports.devtool = "#eval-source-map"
 }
