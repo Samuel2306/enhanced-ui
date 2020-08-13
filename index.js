@@ -1,5 +1,4 @@
 const Button = require('./src/components/Button.js')
-console.log(111)
 let EnhancedUI = {
   name: 'EnhancedUI'
 }
