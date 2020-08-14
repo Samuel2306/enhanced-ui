@@ -1,7 +1,7 @@
 <template>
   <el-button
     class="mood"
-    :class="{'noLoadingIcon': showLoadingIcon}"
+    :class="{'noLoadingIcon': !showLoadingIcon}"
     :type="type"
     :plain="plain"
     :round="round"
