@@ -3,7 +3,7 @@
     <img src="./assets/logo.png">
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
-    <extended-button :queue="[this.h1, this.h2]"/>
+    <extended-button :queue="[this.h1, this.h2]" type="primary"/>
     <ul>
       <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
       <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>

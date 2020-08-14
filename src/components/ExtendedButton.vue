@@ -1,5 +1,16 @@
 <template>
-  <el-button class="mood" @click="clickBtn" :loading="state">{{btnText || text}}</el-button>
+  <el-button
+    class="mood"
+    :class="{'noLoadingIcon': showLoadingIcon}"
+    :type="type"
+    :plain="plain"
+    :round="round"
+    :circle="circle"
+    :disabled="disabled"
+    @click="clickBtn"
+    :loading="state">
+    {{btnText || text}}
+  </el-button>
 </template>
 <script>
   export default {
@@ -27,6 +38,32 @@
       },
       btnText: {
         type: String
+      },
+      type: {
+        type: String,
+        default: 'default'
+      },
+      plain: {
+        type: Boolean,
+        default: false
+      },
+      round: {
+        type: Boolean,
+        default: false
+      },
+      circle: {
+        type: Boolean,
+        default: false
+      },
+      icon: {
+        type: String
+      },
+      disabled: {
+        type: Boolean
+      },
+      showLoadingIcon: {
+        type: Boolean,
+        default: true
       }
     },
     data(){
@@ -37,7 +74,7 @@
     },
     methods: {
       async runQueue(){ // params：传给list中第一个promise对象的参数
-        if(!this.queue.length){
+        if(!this.queue.length || this.disabled){
           return
         }
         let params
@@ -93,18 +130,32 @@
         }
       },
       toggleState(bool) {
+        if(this.disabled){
+          return
+        }
         this.state = bool != undefined ? bool : !this.state
       },
       clickBtn(){
-        if(!this.state && this.queue.length){
+        if(!this.state && !this.disabled){
           this.$emit('click')
-          this.toggleState(true)
-          this.runQueue()
+          if(this.queue.length){
+            this.toggleState(true)
+            this.runQueue()
+          }
         }
       }
     },
   }
 </script>
 <style lang="scss">
-
+  .el-button{
+    &.noLoadingIcon {
+      .el-icon-loading{
+        display: none !important;
+        & + span{
+          margin-left: 0 !important;
+        }
+      }
+    }
+  }
 </style>

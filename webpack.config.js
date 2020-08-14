@@ -9,8 +9,7 @@ module.exports = {
   output: {
     path: resolve('dist'),
     publicPath: '/dist/',
-    filename: 'build.js',
-    library: 'enhanced-ui'
+    filename: 'build.js'
   },
   module: {
     rules: [
