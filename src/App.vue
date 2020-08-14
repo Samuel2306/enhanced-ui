@@ -3,6 +3,7 @@
     <img src="./assets/logo.png">
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
+    <extended-button :queue="[this.h1, this.h2]"/>
     <ul>
       <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
       <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
@@ -20,12 +21,29 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import Button from '@/components/Button.vue'
+  Vue.component("extended-button", Button)
 export default {
   name: 'app',
   data () {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
+  },
+  methods: {
+    h1(res, next, abort){
+      setTimeout(() => {
+        next([2, 'name'])
+      },2000)
+    },
+    h2(res, next, abort){
+      console.log(res)
+      setTimeout(() => {
+        console.log('over')
+        next()
+      },2000)
+    },
   }
 }
 </script>

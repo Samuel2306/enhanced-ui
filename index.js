@@ -1,4 +1,4 @@
-const Button = require('./src/components/Button.js')
+const Button = require('./src/components/Button.vue')
 let EnhancedUI = {
   name: 'EnhancedUI'
 }

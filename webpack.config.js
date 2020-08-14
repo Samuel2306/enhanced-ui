@@ -1,11 +1,13 @@
 var path = require('path')
 var webpack = require('webpack')
 const NODE_ENV = process.env.NODE_ENV
-
+function resolve (dir) {
+  return path.join(__dirname, '.', dir)
+}
 module.exports = {
   entry: NODE_ENV == 'development' ? './src/main.js' : './index.js',
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: resolve('dist'),
     publicPath: '/dist/',
     filename: 'build.js',
     library: 'enhanced-ui',
@@ -66,7 +68,7 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
-        loader: 'url-loader',
+        loader: 'file-loader',
         options: {
           name: '[name].[ext]?[hash]',
           limit: 99999
@@ -74,7 +76,7 @@ module.exports = {
       },
       {
         test: /\.(svg|ttf|eot|woff|woff2)$/,
-        loader: 'url-loader',
+        loader: 'file-loader',
         options:{
           name:'[name].[ext]',
           limit: 9999999
@@ -84,7 +86,8 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.esm.js'
+      'vue$': 'vue/dist/vue.esm.js',
+      '@': resolve('src'),
     },
     extensions: ['*', '.js', '.vue', '.json']
   },
