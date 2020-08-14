@@ -1,8 +1,14 @@
-import Button from './src/components/Button.vue'
-let EnhancedUI = {
-  name: 'EnhancedUI'
+import ExtendedButton from './src/components/ExtendedButton.vue'
+
+let install = function (Vue, options) {
+  if(install.installed) return
+  Vue.component(ExtendedButton.name, ExtendedButton)
+  install.installed = true
 }
-EnhancedUI.install = function (Vue, options) {
-  Vue.component("extended-button", Button)
+if(typeof window !== 'undefined' && window.Vue){
+  install(window.Vue)
 }
-export default EnhancedUI
+export default {
+  install,
+  ExtendedButton
+}

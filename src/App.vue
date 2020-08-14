@@ -22,7 +22,7 @@
 
 <script>
   import Vue from 'vue'
-  import Button from '@/components/Button.vue'
+  import Button from '@/components/ExtendedButton.vue'
   Vue.component("extended-button", Button)
 export default {
   name: 'app',

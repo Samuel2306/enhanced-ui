@@ -10,9 +10,7 @@ module.exports = {
     path: resolve('dist'),
     publicPath: '/dist/',
     filename: 'build.js',
-    library: 'enhanced-ui',
-    libraryTarget: 'umd',
-    umdNamedDefine: true
+    library: 'enhanced-ui'
   },
   module: {
     rules: [
