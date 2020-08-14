@@ -7,6 +7,9 @@
     :round="round"
     :circle="circle"
     :disabled="disabled"
+    :size="size"
+    :autofocus="autofocus"
+    :native-type="nativeType"
     @click="clickBtn"
     :loading="state">
     {{btnText || text}}
@@ -60,6 +63,17 @@
       },
       disabled: {
         type: Boolean
+      },
+      size: {
+        type: String   // medium、small、mini
+      },
+      autofocus: {
+        type: Boolean,
+        default: false
+      },
+      nativeType: {
+        type: String,
+        default: 'button'
       },
       showLoadingIcon: {
         type: Boolean,
