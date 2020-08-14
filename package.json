@@ -1,7 +1,7 @@
 {
   "name": "enhanced-ui",
   "description": "A Vue.js project",
-  "version": "1.0.5",
+  "version": "1.0.8",
   "author": "samuel <1224042766@qq.com>",
   "license": "MIT",
   "private": false,
@@ -18,7 +18,10 @@
     "last 2 versions",
     "not ie <= 8"
   ],
-  "repository": "https://github.com/Samuel2306/enhanced-ui.git",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Samuel2306/enhanced-ui.git"
+  },
   "main": "./dist/build.js",
   "devDependencies": {
     "babel-core": "^6.26.0",
