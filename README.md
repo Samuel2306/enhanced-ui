@@ -1,6 +1,6 @@
 # enhanced-elemui
 
-> A Vue.js project
+> UI library based on Element-UI.
 
 ## Build Setup
 
