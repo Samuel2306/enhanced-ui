@@ -18,7 +18,6 @@
 <script>
   export default {
     name: "extended-button",
-    template: '',
     props: {
       queue: {
         type: Array,
@@ -26,15 +25,7 @@
           return []
         }
       },
-      params: {
-        type: Object,
-        default: function(){
-          return {}
-        }
-      },
-      formatterParams: {
-        type: Function
-      },
+      params: {},
       requestType: {
         type: String,
         default: 'queue'  // queue 串行  parallel 并行
@@ -93,7 +84,7 @@
         }
         let params
         try{
-          params = this.formatterParams ? await this.formatterParams.apply(this.$parent) : (this.params ? this.params : {})
+          params = this.params != undefined ? this.params : {}
         }catch(e){
           console.error(e)
           this.toggleState(false)
@@ -153,8 +144,11 @@
         if(!this.state && !this.disabled){
           this.$emit('click')
           if(this.queue.length){
-            this.toggleState(true)
-            this.runQueue()
+            this.$emit('handleParams')
+            this.$nextTick(() => {
+              this.toggleState(true)
+              this.runQueue()
+            })
           }
         }
       }

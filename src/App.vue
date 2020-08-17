@@ -3,7 +3,8 @@
     <img src="./assets/logo.png">
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
-    <extended-button :queue="[this.h1, this.h2]" type="primary"/>
+    <extended-button :queue="[this.h1, this.h2]" :params="params" @handleParams="handleParams" type="primary"/>
+    <extended-select v-model="value" />
     <ul>
       <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
       <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
@@ -22,17 +23,38 @@
 
 <script>
   import Vue from 'vue'
-  import Button from '@/components/ExtendedButton.vue'
+  import Button from '@/components/button/ExtendedButton.vue'
+  import Select from '@/components/select/ExtendedSelect.vue'
   Vue.component("extended-button", Button)
+  Vue.component("extended-select", Select)
 export default {
   name: 'app',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      params: 0,
+      options: [{
+        value: '选项1',
+        label: '黄金糕'
+      }, {
+        value: '选项2',
+        label: '双皮奶'
+      }, {
+        value: '选项3',
+        label: '蚵仔煎'
+      }, {
+        value: '选项4',
+        label: '龙须面'
+      }, {
+        value: '选项5',
+        label: '北京烤鸭'
+      }],
+      value: ''
     }
   },
   methods: {
     h1(res, next, abort){
+      console.log(res)
       setTimeout(() => {
         next([2, 'name'])
       },2000)
@@ -44,6 +66,10 @@ export default {
         next()
       },2000)
     },
+    handleParams(){
+      this.params = 1
+      this.params = 3
+    }
   }
 }
 </script>
