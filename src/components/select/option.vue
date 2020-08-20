@@ -166,3 +166,9 @@
     }
   };
 </script>
+<style lang="scss">
+  .el-select-dropdown__item{
+    display: block;
+    margin: 0
+  }
+</style>

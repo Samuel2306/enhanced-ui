@@ -4,7 +4,14 @@
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
     <extended-button :queue="[this.h1, this.h2]" :params="params" @handleParams="handleParams" type="primary"/>
-    <extended-select v-model="value" />
+    <extended-select v-model="value">
+      <extended-el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value">
+      </extended-el-option>
+    </extended-select>
     <ul>
       <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
       <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
@@ -24,9 +31,11 @@
 <script>
   import Vue from 'vue'
   import Button from '@/components/button/ExtendedButton.vue'
-  import Select from '@/components/select/ExtendedSelect.vue'
+  import Select from '@/components/select/select.vue'
+  import ExtendedElOption from '@/components/select/option.vue'
   Vue.component("extended-button", Button)
   Vue.component("extended-select", Select)
+  Vue.component("extended-el-option", ExtendedElOption)
 export default {
   name: 'app',
   data () {
