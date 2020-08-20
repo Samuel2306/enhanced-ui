@@ -10,7 +10,7 @@
 </template>
 
 <script type="text/babel">
-  import Emitter from '@/mixins/emitter';
+  import Emitter from '../../mixins/emitter';
 
   export default {
     mixins: [Emitter],
@@ -35,7 +35,7 @@
 
     watch: {
       disabled(val) {
-        this.broadcast('ElOption', 'handleGroupDisabled', val);
+        this.broadcast('ExtendedElOption', 'handleGroupDisabled', val);
       }
     },
 
@@ -53,7 +53,7 @@
 
     mounted() {
       if (this.disabled) {
-        this.broadcast('ElOption', 'handleGroupDisabled', this.disabled);
+        this.broadcast('ExtendedElOption', 'handleGroupDisabled', this.disabled);
       }
     }
   };

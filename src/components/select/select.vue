@@ -135,20 +135,20 @@
 </template>
 
 <script type="text/babel">
-  import Emitter from '@/mixins/emitter';
-  import Focus from '@/mixins/focus';
-  import Locale from '@/mixins/locale';
+  import Emitter from '../../mixins/emitter';
+  import Focus from '../../mixins/focus';
+  import Locale from '../../mixins/locale';
   import ElSelectMenu from './select-dropdown.vue';
   import ElOption from './option.vue';
   import ElScrollbar from '../scrollbar';
   import debounce from 'throttle-debounce/debounce';
-  import Clickoutside from '@/utils/clickoutside';
-  import { addResizeListener, removeResizeListener } from '@/utils/resize-event';
-  import { t } from '@/locale';
-  import scrollIntoView from '@/utils/scroll-into-view';
-  import { getValueByPath, valueEquals, isIE, isEdge } from '@/utils/util';
+  import Clickoutside from '../../utils/clickoutside';
+  import { addResizeListener, removeResizeListener } from '../../utils/resize-event';
+  import { t } from '../../locale';
+  import scrollIntoView from '../../utils/scroll-into-view';
+  import { getValueByPath, valueEquals, isIE, isEdge } from '../../utils/util';
   import NavigationMixin from './navigation-mixin';
-  import { isKorean } from '@/utils/shared';
+  import { isKorean } from '../../utils/shared';
 
   export default {
     mixins: [Emitter, Locale, Focus('reference'), NavigationMixin],
@@ -442,8 +442,8 @@
               this.$refs.input.focus();
             } else {
               if (!this.remote) {
-                this.broadcast('ElOption', 'queryChange', '');
-                this.broadcast('ElOptionGroup', 'queryChange');
+                this.broadcast('ExtendedElOption', 'queryChange', '');
+                this.broadcast('ExtendedElOptionGroup', 'queryChange');
               }
 
               if (this.selectedLabel) {
@@ -519,11 +519,11 @@
           this.remoteMethod(val);
         } else if (typeof this.filterMethod === 'function') {
           this.filterMethod(val);
-          this.broadcast('ElOptionGroup', 'queryChange');
+          this.broadcast('ExtendedElOptionGroup', 'queryChange');
         } else {
           this.filteredOptionsCount = this.optionsCount;
-          this.broadcast('ElOption', 'queryChange', val);
-          this.broadcast('ElOptionGroup', 'queryChange');
+          this.broadcast('ExtendedElOption', 'queryChange', val);
+          this.broadcast('ExtendedElOptionGroup', 'queryChange');
         }
         // defaultFirstOption：在输入框按下回车，选择第一个匹配项，需配合 filterable 或 remote 使用
         if (this.defaultFirstOption && (this.filterable || this.remote) && this.filteredOptionsCount) {

@@ -16,8 +16,8 @@
 </template>
 
 <script type="text/babel">
-  import Emitter from '@/mixins/emitter';
-  import { getValueByPath, escapeRegexpString } from '@/utils/util';
+  import Emitter from '../../mixins/emitter';
+  import { getValueByPath, escapeRegexpString } from '../../utils/util';
 
   export default {
     mixins: [Emitter],
