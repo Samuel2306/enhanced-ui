@@ -4,7 +4,13 @@
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
     <extended-button :queue="[this.h1, this.h2]" :params="params" @handleParams="handleParams" type="primary"/>
-    <extended-select v-model="value">
+    <extended-select
+      multiple
+      clearable
+      :interceptorBeforeChange="interceptorBeforeChange"
+      :confirmBeforeChange="confirmBeforeChange"
+      v-model="value"
+      @change="changeSelect">
       <extended-el-option
         v-for="item in options"
         :key="item.value"
@@ -78,6 +84,21 @@ export default {
     handleParams(){
       this.params = 1
       this.params = 3
+    },
+    changeSelect(oldValue, newValue){
+      console.log('oldValue:' + oldValue)
+      console.log('newValue:' + newValue)
+    },
+    interceptorBeforeChange(){
+      return {
+        valid: true,
+        message: "我就是不让你改"
+      }
+    },
+    confirmBeforeChange(option){
+      console.log(this.value)
+      console.log(option)
+      return false
     }
   }
 }
