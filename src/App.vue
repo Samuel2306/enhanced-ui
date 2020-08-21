@@ -7,8 +7,6 @@
     <extended-select
       multiple
       clearable
-      :interceptorBeforeChange="interceptorBeforeChange"
-      :confirmBeforeChange="confirmBeforeChange"
       v-model="value"
       @change="changeSelect">
       <extended-el-option
@@ -85,7 +83,7 @@ export default {
       this.params = 1
       this.params = 3
     },
-    changeSelect(oldValue, newValue){
+    changeSelect(newValue, oldValue){
       console.log('oldValue:' + oldValue)
       console.log('newValue:' + newValue)
     },

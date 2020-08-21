@@ -104,11 +104,11 @@
       name="el-zoom-in-top"
       @before-enter="handleMenuEnter"
       @after-leave="doDestroy">
-      <el-select-menu
+      <extended-el-select-menu
         ref="popper"
         :append-to-body="popperAppendToBody"
         v-show="visible && emptyText !== false">
-        <el-scrollbar
+        <extended-el-scrollbar
           tag="ul"
           wrap-class="el-select-dropdown__wrap"
           view-class="el-select-dropdown__list"
@@ -116,20 +116,20 @@
           :class="{ 'is-empty': !allowCreate && query && filteredOptionsCount === 0 }"
           v-show="options.length > 0 && !loading">
           <!-- 以下这个option是用来创建用户自定义的选项的 -->
-          <el-option
+          <extended-el-option
             :value="query"
             created
             v-if="showNewOption">
-          </el-option>
+          </extended-el-option>
           <slot></slot>
-        </el-scrollbar>
+        </extended-el-scrollbar>
         <template v-if="emptyText && (!allowCreate || loading || (allowCreate && options.length === 0 ))">
           <slot name="empty" v-if="$slots.empty"></slot>
           <p class="el-select-dropdown__empty" v-else>
             {{ emptyText }}
           </p>
         </template>
-      </el-select-menu>
+      </extended-el-select-menu>
     </transition>
   </div>
 </template>
@@ -138,9 +138,10 @@
   import Emitter from '../../mixins/emitter';
   import Focus from '../../mixins/focus';
   import Locale from '../../mixins/locale';
-  import ElSelectMenu from './select-dropdown.vue';
-  import ElOption from './option.vue';
-  import ElScrollbar from '../scrollbar';
+  import ExtendedElSelectMenu from './select-dropdown.vue';
+  import ExtendedElOption from './option.vue';
+  import ExtendedElOptionGroup from './option-group.vue';
+  import ExtendedElScrollbar from '../scrollbar';
   import debounce from 'throttle-debounce/debounce';
   import Clickoutside from '../../utils/clickoutside';
   import { addResizeListener, removeResizeListener } from '../../utils/resize-event';
@@ -153,7 +154,7 @@
   export default {
     mixins: [Emitter, Locale, Focus('reference'), NavigationMixin],
 
-    name: 'extended-el-select',
+    name: 'ExtendedElSelect',
 
     componentName: 'ExtendedElSelect',
 
@@ -241,9 +242,10 @@
     },
 
     components: {
-      ElSelectMenu,
-      ElOption,
-      ElScrollbar
+      ExtendedElSelectMenu,
+      ExtendedElOption,
+      ExtendedElScrollbar,
+      ExtendedElOptionGroup
     },
 
     directives: { Clickoutside },
@@ -252,7 +254,8 @@
       name: String,
       id: String,
       value: {
-        required: true
+        required: true,
+        type: String | Number | Array
       },
       autocomplete: {
         type: String,
@@ -401,7 +404,7 @@
       visible(val) {
         // console.log('visible：' + val);
         if (!val) {
-          this.broadcast('ElSelectDropdown', 'destroyPopper');
+          this.broadcast('ExtendedElSelectDropdown', 'destroyPopper');
           if (this.$refs.input) {
             this.$refs.input.blur();
           }
@@ -434,7 +437,7 @@
             }
           }
         } else {
-          this.broadcast('ElSelectDropdown', 'updatePopper');
+          this.broadcast('ExtendedElSelectDropdown', 'updatePopper');
           if (this.filterable) {
             this.query = this.remote ? '' : this.selectedLabel;
             this.handleQueryChange(this.query);
@@ -459,7 +462,7 @@
       options() {
         if (this.$isServer) return;
         this.$nextTick(() => {
-          this.broadcast('ElSelectDropdown', 'updatePopper');
+          this.broadcast('ExtendedElSelectDropdown', 'updatePopper');
         });
         if (this.multiple) {
           this.resetInputHeight();
@@ -500,7 +503,7 @@
         }
         this.previousQuery = val;
         this.$nextTick(() => { // 触发updatePopper事件
-          if (this.visible) this.broadcast('ElSelectDropdown', 'updatePopper');
+          if (this.visible) this.broadcast('ExtendedElSelectDropdown', 'updatePopper');
         });
         this.hoverIndex = -1;
         // 多选且可搜索的情况下
@@ -550,7 +553,7 @@
       // 新旧值不同时乘触发change事件
       emitChange(val) {
         if (!valueEquals(this.value, val)) {
-          this.$emit('change', this.value, val);
+          this.$emit('change', val, this.value);
         }
       },
       // 根据value 值获取对应option的数据对象
@@ -711,7 +714,7 @@
             : Math.max(tags ? (tags.clientHeight + (tags.clientHeight > sizeInMap ? 6 : 0)) : 0, sizeInMap) + 'px'; // (tags.clientHeight > sizeInMap ? 6 : 0) 这个应该是加个padding的作用
           // 如果显示下拉框，且有相应的选项，更新popper
           if (this.visible && this.emptyText !== false) {
-            this.broadcast('ElSelectDropdown', 'updatePopper');
+            this.broadcast('ExtendedElSelectDropdown', 'updatePopper');
           }
         });
       },

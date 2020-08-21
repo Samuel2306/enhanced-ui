@@ -22,9 +22,9 @@
   export default {
     mixins: [Emitter],
 
-    name: 'ElOption',
+    name: 'ExtendedElOption',
 
-    componentName: 'ElOption',
+    componentName: 'ExtendedElOption',
 
     inject: ['select'],
 

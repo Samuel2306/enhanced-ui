@@ -17,7 +17,7 @@
 </template>
 <script>
   export default {
-    name: "extended-button",
+    name: "ExtendedButton",
     props: {
       queue: {
         type: Array,
