@@ -1,4 +1,7 @@
-import BasePageGenerator from './BasePageGenerator'
+const path = require('path')
+const fs = require('fs')
+const BasePageGenerator = require(path.resolve(__dirname, './BasePageGenerator'))
+const util = require('../util')
 class SearchPageGenerator extends BasePageGenerator{
   constructor(options){
     super(options)
@@ -25,24 +28,60 @@ class SearchPageGenerator extends BasePageGenerator{
     }
     this._init()
   }
-  _init() {
+  async _init() {
     super._init()
+    let _this = this
     let res = this.template.join("\n")
     let modulesScript = this.genModulesScripts()
     res = res.replace("<import-slot></import-slot>", modulesScript)
     let exportScript = this.genExportScripts()
     res = res.replace("<export-slot></export-slot>", exportScript)
     res = res.replace("<html-slot></html-slot>", this.options.template ? this.options.template : "")
-    console.log(res)
-    return
-    this.downloadFile(res)
+
+    let folderPath = path.resolve(__dirname, "../../" + this.options.genTargetFolder)
+    await fs.exists(folderPath, async function(exists) {
+      if(!exists){
+        await fs.mkdirSync(folderPath)
+      }
+      let genPath = folderPath + ("/" + _this.options.fileName)
+      await _this.genFileToPackage(res, genPath)
+      _this.genRouter()
+    });
   }
   validate(){
     let flag = true
     flag = super.validate()
     return flag
   }
-
+  // 自动在vue-router上面配置路由
+  genRouter(){
+    if(!this.options.routeName){
+      return
+    }
+    let configPath = path.resolve(__dirname, '../routerConfig/config.json')
+    let routerConfig = require(configPath)
+    let newRoute = {
+      "name": this.options.routeName,
+      "filePath": "@/" + this.options.genTargetFolder + "/" + this.options.fileName,
+      "routePath": this.options.routePath ? this.options.routePath : util.toLowerLine(this.options.fileName.substring(0, this.options.fileName.indexOf('.')), '-')
+    }
+    let flag = false
+    routerConfig.forEach((route, index) => {
+      if(route.name == newRoute.name){
+        flag = true
+        routerConfig.splice(index, 1, newRoute)
+      }
+    })
+    if(!flag){
+      routerConfig.push(newRoute)
+    }
+    fs.writeFile(configPath, JSON.stringify(routerConfig), function(err) {
+      if(err) {
+        return console.log(err);
+      }
+      console.log("更新路由配置成功");
+    });
+  }
 }
 
-export default SearchPageGenerator
+module.exports = SearchPageGenerator

@@ -1,7 +1,6 @@
-import {
-  toCamel,
-  toLowerLine
-} from '../util'
+const path = require('path')
+const fs = require('fs')
+const util = require('../util')
 class BasePageGenerator {
   static addGlobalModules(modules){
     if(Array.isArray(modules)){
@@ -54,7 +53,7 @@ class BasePageGenerator {
       if(typeof module == 'object'){
         return "import " + module.name + " from " + module.path
       }else if(BasePageGenerator.globalModules.indexOf(module) > -1){
-        return "import " + toCamel(module, ['_','-'], true) + " from " + module
+        return "import " + util.toCamel(module, ['_','-'], true) + " from " + JSON.stringify(module)
       }else {
         BasePageGenerator.vuexModules.forEach((vuexModuleName) => {
           if(module.indexOf(vuexModuleName) > -1 && this.vuexModules){
@@ -78,7 +77,7 @@ class BasePageGenerator {
       if(this.componentList){
         this.componentList.push(component.name)
       }
-      arr.push("import " + component.name + " from " + (component.path || loadComponentUrl))
+      arr.push("import " + component.name + " from " + JSON.stringify(component.path || loadComponentUrl))
     })
     return arr.length ? arr.join(";\n") : ""
   }
@@ -119,7 +118,7 @@ class BasePageGenerator {
 
     let components = "\tcomponents: {\n"
     this.componentList.forEach((comp) => {
-      components += "\t\t" + JSON.stringify("v-" + toLowerLine(comp, '-')) + ": " + comp + ",\n"
+      components += "\t\t" + JSON.stringify("v-" + util.toLowerLine(comp, '-')) + ": " + comp + ",\n"
     })
     components += "\t},\n"
     let methods = ["\tmethods: {\n"]
@@ -144,8 +143,8 @@ class BasePageGenerator {
 
     return str + pageNameStr + components + data + computed + props + created + methods + mounted + '}'
   }
-  downloadFile(res){
-    let blob = new Blob(
+  async genFileToPackage(res, path){
+    /*let blob = new Blob(
       [res],
       {type: "text/html"}
     );
@@ -156,7 +155,13 @@ class BasePageGenerator {
     document.body.appendChild(downloadElement);
     downloadElement.click(); // 点击下载
     document.body.removeChild(downloadElement); // 下载完成移除元素
-    window.URL.revokeObjectURL(href); // 释放掉blob对象
+    window.URL.revokeObjectURL(href); // 释放掉blob对象*/
+    await fs.writeFile(path, res, function(err) {
+      if(err) {
+        return console.log(err);
+      }
+      console.log("The file was saved!");
+    });
   }
 }
 BasePageGenerator.globalModules = [
@@ -166,4 +171,4 @@ BasePageGenerator.globalModules = [
 ]
 BasePageGenerator.vuexModules = ["mapState", "mapGetter", "mapMutations", "mapActions"]
 
-export default BasePageGenerator
+module.exports = BasePageGenerator

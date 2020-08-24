@@ -40,7 +40,7 @@ function toLowerLine(str, join) {
 }
 
 
-export {
+module.exports = {
   toCamel,
   toLowerLine,
 }
