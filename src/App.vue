@@ -1,8 +1,6 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
     <extended-button :queue="[this.h1, this.h2]" :params="params" @handleParams="handleParams" type="primary"/>
     <extended-select
       multiple
@@ -16,33 +14,55 @@
         :value="item.value">
       </extended-el-option>
     </extended-select>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
+    <extended-dynamic-form
+      :formConfig="formConfig"
+      v-model="formData"
+      @input="formChange" />
   </div>
 </template>
 
 <script>
   import Vue from 'vue'
-  import Button from '@/components/button/ExtendedButton.vue'
+  import Button from '@/components/button/button.vue'
   import Select from '@/components/select/select.vue'
   import ExtendedElOption from '@/components/select/option.vue'
+  import ExtendedDynamicForm from '@/components/dynamic_form/dynamic_form.vue'
   Vue.component("extended-button", Button)
   Vue.component("extended-select", Select)
   Vue.component("extended-el-option", ExtendedElOption)
+  Vue.component("extended-dynamic-form", ExtendedDynamicForm)
+
+  let searchModel = {
+    name: 'searchModel',
+    post: function(params){
+      console.log(params)
+      return Promise.resolve("searchModel")
+    }
+  }
+  let editModel = {
+    name: 'editModel',
+    post: function(params){
+      console.log(params)
+      return Promise.resolve("editModel")
+    }
+  }
+  let delModel = {
+    name: 'delModel',
+    post: function(params){
+      console.log(params)
+      return Promise.resolve("delModel")
+    }
+  }
+  let cancelModel = {
+    name: 'cancelModel',
+    post: function(params){
+      console.log(params)
+      return Promise.resolve("cancelModel")
+    }
+  }
 export default {
   name: 'app',
-  data () {
+  data (vm) {
     return {
       msg: 'Welcome to Your Vue.js App',
       params: 0,
@@ -62,7 +82,225 @@ export default {
         value: '选项5',
         label: '北京烤鸭'
       }],
-      value: ''
+      value: '',
+
+
+      fileList: null,
+      columnsData: [
+        {
+          label: '日期',
+          attrName: 'date',
+          width: 180,
+        },
+        {
+          label: '用户',
+          type: 'formatter',
+          component: 'product_list_table_user_component',
+        },
+        {
+          label: '操作',
+          type: 'formatter',
+          component: 'product_list_table_operation_component',
+        },
+      ],
+      content: "",
+      handlerMap: {
+        search: {
+          paramsExchange: function(row){
+            return row
+          },
+          handlerModel: searchModel,
+          callback: ((res) => {
+            console.log(this)
+            console.log(res)
+          }).bind(vm),
+        },
+        edit: {
+          paramsExchange: function(row){
+            return row
+          },
+          handlerModel: editModel,
+          callback: ((res) => {
+            console.log(this)
+            console.log(res)
+          }).bind(vm),
+        },
+        cancel: {
+          paramsExchange: function(row){
+            return row
+          },
+          handlerModel: cancelModel,
+          callback: ((res) => {
+            console.log(this)
+            console.log(res)
+          }).bind(vm),
+        },
+        del: {
+          paramsExchange: function(row){
+            return row
+          },
+          handlerModel: delModel,
+          callback: ((res) => {
+            console.log(this)
+            console.log(res)
+          }).bind(vm),
+        },
+      },
+      optionsList: [
+        {
+          attrName: 'productName',
+          initValue: '雨伞',
+          exchange: function(value){
+            return value
+          },
+          component: 'product_list_form_input'
+        }
+      ],
+      formData: {
+        "name": "Genji",
+        "gender": "1",
+        "origin": "",
+        "love": [],
+        "city": [],
+      },
+      formConfig: {
+        "inline": true,
+        "labelPosition": "right",
+        "labelWidth": "",
+        "size": "small",
+        "statusIcon": true,
+        "formItemList": [
+          {
+            "type": "input",
+            "label": "姓名",
+            "disable": false,
+            "readonly": false,
+            "value": "",
+            "placeholder": "请输入姓名",
+            "rules": [],
+            "key": "name",
+            "subtype": "text"
+          },
+          {
+            "type": "select",
+            "label": "来源",
+            "multiple": false,
+            "multipleLimit": 3,
+            "value": "",
+            "placeholder": "请输入姓名",
+            "rules": [],
+            "key": "origin",
+            "options": [
+              {"label": "精品商城","value": "PT001"},
+              {"label": "车商城","value": "PT003"}
+            ]
+          },
+          {
+            "type": "radio",
+            "label": "性别",
+            "value": "",
+            "button": false,
+            "border": true,
+            "rules": [],
+            "key": "gender",
+            "options": [
+              {
+                "value": 1,
+                "label": "男",
+                "disabled": false
+              },
+              {
+                "value": 0,
+                "label": "女",
+                "disabled": false
+              }
+            ]
+          },
+          {
+            "type": "checkbox",
+            "label": "爱好",
+            "value": [],
+            "button": true,
+            "border": true,
+            "rules": [],
+            "key": "love",
+            "min": 0,
+            "max": 100,
+            "options": [
+              {
+                "value": "1",
+                "label": "游泳",
+                "disabled": false
+              },
+              {
+                "value": "2",
+                "label": "看电影",
+                "disabled": false
+              },
+              {
+                "value": "3",
+                "label": "打篮球",
+                "disabled": false
+              }
+            ]
+          },
+          {
+            "type": "cascader",
+            "label": "城市",
+            "value": [],
+            "rules": [],
+            "key": "city",
+            props: { multiple: true },
+            "options": [{
+              value: 1,
+              label: '东南',
+              children: [{
+                value: 2,
+                label: '上海',
+                children: [
+                  { value: 3, label: '普陀' },
+                  { value: 4, label: '黄埔' },
+                  { value: 5, label: '徐汇' }
+                ]
+              }, {
+                value: 7,
+                label: '江苏',
+                children: [
+                  { value: 8, label: '南京' },
+                  { value: 9, label: '苏州' },
+                  { value: 10, label: '无锡' }
+                ]
+              }, {
+                value: 12,
+                label: '浙江',
+                children: [
+                  { value: 13, label: '杭州' },
+                  { value: 14, label: '宁波' },
+                  { value: 15, label: '嘉兴' }
+                ]
+              }]
+            }, {
+              value: 17,
+              label: '西北',
+              children: [{
+                value: 18,
+                label: '陕西',
+                children: [
+                  { value: 19, label: '西安' },
+                  { value: 20, label: '延安' }
+                ]
+              }, {
+                value: 21,
+                label: '新疆维吾尔族自治区',
+                children: [
+                  { value: 22, label: '乌鲁木齐' },
+                  { value: 23, label: '克拉玛依' }
+                ]
+              }]
+            }]
+          }
+        ]
+      }
     }
   },
   methods: {
@@ -97,6 +335,11 @@ export default {
       console.log(this.value)
       console.log(option)
       return false
+    },
+
+    formChange(data){
+      this.formData = data
+      console.log(this.formData)
     }
   }
 }
