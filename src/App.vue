@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
+    {{formData}}
     <extended-button :queue="[this.h1, this.h2]" :params="params" @handleParams="handleParams" type="primary"/>
     <extended-select
       multiple
@@ -16,8 +17,7 @@
     </extended-select>
     <extended-dynamic-form
       :formConfig="formConfig"
-      v-model="formData"
-      @input="formChange" />
+      v-model="formData" />
   </div>
 </template>
 
@@ -335,11 +335,6 @@ export default {
       console.log(this.value)
       console.log(option)
       return false
-    },
-
-    formChange(data){
-      this.formData = data
-      console.log(this.formData)
     }
   }
 }

@@ -18,8 +18,7 @@
         :formItemList="formConfig.formItemList"
         :value="value[item.key]"
         @input="handleInput($event, item.key)"
-        v-show="item.visible || item.visible == null"
-      />
+        v-show="item.visible || item.visible == null" />
     </el-row>
   </el-form>
 </template>

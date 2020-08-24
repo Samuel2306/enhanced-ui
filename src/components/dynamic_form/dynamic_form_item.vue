@@ -9,7 +9,8 @@
 
       <el-input
         v-if="item.type==='input'"
-        v-bind="$attrs" v-on="$listeners"
+        v-bind="$attrs"
+        v-on="$listeners"
         :type="item.subtype"
         :placeholder="item.placeholder"
         :disabled="item.disable"
@@ -20,7 +21,8 @@
         @visible-change="visibleChange"
         @change="changeSelect($event,item)"
         v-else-if="item.type==='select'"
-        v-bind="$attrs" v-on="$listeners"
+        v-bind="$attrs"
+        v-on="$listeners"
         :multiple="item.multiple"
         :disabled="item.disabled"
         :multiple-limit="item.multipleLimit">
@@ -34,7 +36,8 @@
       </el-select>
       <el-radio-group
         v-else-if="item.type==='radio'"
-        v-bind="$attrs" v-on="$listeners"
+        v-bind="$attrs"
+        v-on="$listeners"
         :disabled="item.disable"
         :readonly="item.readonly">
         <el-radio-button
@@ -155,6 +158,7 @@
           this.item.getOptionsFunc && this.item.getOptionsFunc(this.item, this.formItemList)
         }
       })
+      console.log(this.$attrs.name)
     }
   }
 </script>
