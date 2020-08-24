@@ -62,35 +62,37 @@
           }
         })
         this.$emit('input', formData)
+      },
+      setStyle(){
+        this.$nextTick(() => {
+          let form = this.$refs['dynamic_form' + this.ts].$el
+          let dynamicFormItems = form.getElementsByClassName('dynamicFormItem')
+          for (let i = 0; i < dynamicFormItems.length; i++) {
+            let item = dynamicFormItems[i]
+            item.style.position = 'relative'
+            item.style.width = '100%'
+            let label = item.getElementsByClassName('el-form-item__label')
+            if(label && label[0]){
+              label[0].style.width = this.formConfig.labelWidth || this.labelWidth
+              label[0].style.position = 'absolute'
+              label[0].style.left = '0'
+              label[0].style.top = '0'
+            }
+            let content = item.getElementsByClassName('el-form-item__content')
+            if(content && content[0]){
+              content[0].style.textAlign = 'left'
+              content[0].style.position = 'absolute'
+              content[0].style.left = this.formConfig.labelWidth || this.labelWidth
+              content[0].style.right = '0'
+              content[0].style.top = '0'
+            }
+          }
+        })
       }
     },
     mounted() {
       this.setDefaultValue()
-      this.$nextTick(() => {
-        let form = this.$refs['dynamic_form' + this.ts].$el
-        let dynamicFormItems = form.getElementsByClassName('dynamicFormItem')
-        for (let i = 0; i < dynamicFormItems.length; i++) {
-          let item = dynamicFormItems[i]
-          item.style.position = 'relative'
-          item.style.width = '100%'
-          let label = item.getElementsByClassName('el-form-item__label')
-          if(label && label[0]){
-            label[0].style.width = this.formConfig.labelWidth || this.labelWidth
-            label[0].style.position = 'absolute'
-            label[0].style.left = '0'
-            label[0].style.top = '0'
-          }
-          let content = item.getElementsByClassName('el-form-item__content')
-          if(content && content[0]){
-            content[0].style.textAlign = 'left'
-            content[0].style.position = 'absolute'
-            content[0].style.left = this.formConfig.labelWidth || this.labelWidth
-            content[0].style.right = '0'
-            content[0].style.top = '0'
-          }
-        }
-      })
-
+      this.setStyle()
     },
   }
 </script>

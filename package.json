@@ -10,6 +10,7 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
+    "axios": "^0.20.0",
     "element-ui": "^2.13.2",
     "resize-observer-polyfill": "^1.5.1",
     "throttle-debounce": "^2.3.0",

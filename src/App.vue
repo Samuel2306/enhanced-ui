@@ -18,6 +18,7 @@
     <extended-dynamic-form
       :formConfig="formConfig"
       v-model="formData" />
+    <button @click="genFile">按钮</button>
   </div>
 </template>
 
@@ -31,6 +32,8 @@
   Vue.component("extended-select", Select)
   Vue.component("extended-el-option", ExtendedElOption)
   Vue.component("extended-dynamic-form", ExtendedDynamicForm)
+  import SearchPageGenerator from '@/fileGenScripts/generator/SearchPageGenerator'
+
 
   let searchModel = {
     name: 'searchModel',
@@ -304,6 +307,45 @@ export default {
     }
   },
   methods: {
+    genFile(){
+      new SearchPageGenerator({
+        fileName: 'a.vue',
+        modules: ['vue', 'axios', "import { mapState, mapMutations, mapGetter, mapActions} from 'vuex'"],
+        data: {
+          name: "sf",
+          age: 28,
+          list: [
+            {name: "sf", age: 28},
+            {name: "sf1", age: 29},
+          ],
+          target: null
+        },
+        props: {
+          name: Boolean,
+        },
+        methods: {
+          add(){
+            console.log(this.name)
+          },
+          multiply: function(){
+            console.log(this.name)
+          },
+          multiply1: () => {
+            console.log(this.name)
+          }
+        },
+        // 定义当前页面的关联组件
+        components: [
+          {
+            name: 'ExtendedButton',
+            path: '@/components/button/button'
+          }
+        ],
+        template: [
+          '<v-extended-button></v-extended-button>'
+        ].join("")
+      })
+    },
     h1(res, next, abort){
       console.log(res)
       setTimeout(() => {
