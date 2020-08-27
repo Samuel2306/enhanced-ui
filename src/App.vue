@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
-    {{formData}}
     <extended-button :queue="[this.h1, this.h2]" :params="params" @handleParams="handleParams" type="primary"/>
     <extended-select
       multiple
@@ -15,9 +14,7 @@
         :value="item.value">
       </extended-el-option>
     </extended-select>
-    <extended-dynamic-form
-      :formConfig="formConfig"
-      v-model="formData" />
+    <extended-dynamic-form @update="changeFormData" :formConfig="formConfig"/>
     <button @click="genFile">按钮</button>
   </div>
 </template>
@@ -159,26 +156,14 @@ export default {
           component: 'product_list_form_input'
         }
       ],
-      formData: {
-        "name": "Genji",
-        "gender": "1",
-        "origin": "",
-        "love": [],
-        "city": [],
-      },
       formConfig: {
-        "inline": true,
-        "labelPosition": "right",
-        "labelWidth": "",
-        "size": "small",
-        "statusIcon": true,
         "formItemList": [
           {
             "type": "input",
             "label": "姓名",
             "disable": false,
             "readonly": false,
-            "value": "",
+            "value": "111",
             "placeholder": "请输入姓名",
             "rules": [],
             "key": "name",
@@ -189,7 +174,7 @@ export default {
             "label": "来源",
             "multiple": false,
             "multipleLimit": 3,
-            "value": "",
+            "value": "PT001",
             "placeholder": "请输入姓名",
             "rules": [],
             "key": "origin",
@@ -222,7 +207,7 @@ export default {
           {
             "type": "checkbox",
             "label": "爱好",
-            "value": [],
+            "value": ['1', '2'],
             "button": true,
             "border": true,
             "rules": [],
@@ -253,7 +238,7 @@ export default {
             "value": [],
             "rules": [],
             "key": "city",
-            props: { multiple: true },
+            "props": { multiple: true },
             "options": [{
               value: 1,
               label: '东南',
@@ -341,6 +326,10 @@ export default {
       console.log(this.value)
       console.log(option)
       return false
+    },
+
+    changeFormData(data){
+      console.log(data)
     }
   }
 }

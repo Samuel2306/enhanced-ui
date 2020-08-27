@@ -1,22 +1,17 @@
 <template>
   <el-form
-    :ref="'dynamic_form' + ts"
+    v-if="startRenderFrom"
     class="dynamic-form"
-    :inline="formConfig.inline"
-    :model="value"
-    :label-position="formConfig.labelPosition"
-    :label-width="formConfig.labelWidth || labelWidth"
-    :size='formConfig.size'
-    :status-icon="formConfig.statusIcon">
-    <el-row :gutter="formConfig.gutter || gutter">
+    v-bind="configuration">
+    <el-row :gutter="formConfig.gutter">
       <dynamic-form-item
         :ref="item.key + ts"
-        :span="formConfig.cols ? 24 / formConfig.cols : 24 / defaultCols"
+        :span="span * (item.cols || 1)"
         v-for="item in formConfig.formItemList"
         :key="item.key"
         :item="item"
         :formItemList="formConfig.formItemList"
-        :value="value[item.key]"
+        :value="formData[item.key]"
         @input="handleInput($event, item.key)"
         v-show="item.visible || item.visible == null" />
     </el-row>
@@ -24,44 +19,89 @@
 </template>
 
 <script>
+  import {
+    deepCopy
+  } from '../../utils/my-util'
   import DynamicFormItem from './dynamic_form_item'
   export default {
     name: "DynamicForm",
     components: {
       'dynamic-form-item': DynamicFormItem
     },
+    created(){
+      this.formConfig.formItemList.forEach((item) => {
+        this.formData[item.key] = item.value
+      })
+      this.startRenderFrom = true
+      this.setDefaultValue()
+    },
     data(){
       return {
         ts: Date.now(),
-        gutter: 20,
-        labelWidth: '80px',
-        defaultCols: 3
+
+        formData: {},
+        startRenderFrom: false
       }
     },
     props: {
-      formConfig: {  // 整个表达的配置参数
+      // 整个表单的配置参数
+      formConfig: {
         type: Object,
         required: true
       },
-      value: {
-        type: Object,
-        required: true
+    },
+    computed: {
+      configuration(){
+        let res = {
+          /* 跟布局相关的属性 */
+          gutter: 20,
+          cols: 3,
+          /* 跟布局相关的属性 */
+
+          "model": this.formData,
+          // "rules": [],  // 表单提交验证规则列表
+          "inline": false,
+          "labelWidth": "70px",
+          "labelPosition": "right",
+          "labelSuffix": "",
+          "hideRequiredAsterisk": false,  // 是否显示必填字段的标签旁边的红色星号
+          "showMessage": true,  // 是否显示校验错误信息
+          "inlineMessage": false,  // 是否以行内形式展示校验信息
+          "statusIcon": false, // 是否在输入框中显示校验结果反馈图标
+          "validateOnRuleChange": true,  // 是否在 rules 属性改变后立即触发一次验证
+          "size": "medium",
+          "disabled": false,  // 是否禁用该表单内的所有组件。若设置为 true，则表单内组件上的 disabled 属性不再生效
+        }
+        for(let prop in this.formConfig){
+          if(this.formConfig.hasOwnProperty(prop) && prop != 'formItemList' && prop != 'gutter' && prop != 'cols'){
+            res[prop] = this.formConfig[prop]
+          }
+        }
+
+        return res
+      },
+      span(){
+        if(!this.formConfig.cols){
+          return 8
+        }
+        if(typeof this.formConfig.cols != 'number'){
+          console.error("formConfig的cols属性只能为数字类型")
+          return 8
+        }
+        return 24 / this.formConfig.cols
       }
     },
     methods: {
       handleInput(val, key) {
         // 这里element-ui没有上报event，直接就是value了,  val原来是$event对象
-        this.$emit('input', { ...this.value, [key]: val })
+        this.formData = { ...this.formData, [key]: val }
+        this.$emit('update', deepCopy(this.formData))
       },
       setDefaultValue() {
-        const formData = { ...this.value }
-        // 设置默认值
-        this.formConfig.formItemList.forEach(({ key, value }) => {
-          if (formData[key] === undefined || formData[key] === null) {
-            formData[key] = value
-          }
-        })
-        this.$emit('input', formData)
+        this.$emit('update', deepCopy(this.formData))
+      },
+      getFormData(){
+        return deepCopy(this.formData)
       },
       setStyle(){
         this.$nextTick(() => {
@@ -91,8 +131,7 @@
       }
     },
     mounted() {
-      this.setDefaultValue()
-      this.setStyle()
+      // this.setStyle()
     },
   }
 </script>
@@ -100,6 +139,7 @@
 <style lang="scss">
   .dynamic-form{
     .el-form-item__content{
+      text-align: left !important;
       .el-select{
         width: 100%;
       }
