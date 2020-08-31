@@ -6,11 +6,11 @@
     <el-row :gutter="formConfig.gutter">
       <dynamic-form-item
         :ref="item.key + ts"
-        :span="span * (item.cols || 1)"
-        v-for="item in formConfig.formItemList"
+        :span="span * item.cols"
+        v-for="item in formItemList"
         :key="item.key"
         :item="item"
-        :formItemList="formConfig.formItemList"
+        :formItemList="formItemList"
         :value="formData[item.key]"
         @input="handleInput($event, item.key)"
         v-show="item.visible || item.visible == null" />
@@ -89,6 +89,23 @@
           return 8
         }
         return 24 / this.formConfig.cols
+      },
+      // 标准化formConfig.formItemList里面的每一个组件
+      formItemList(){
+        let list = this.formConfig.formItemList.slice(0)
+        let standard = {
+          visible: true,
+          disabled: false,
+          cols: 1
+        }
+        for (let i = 0; i < list.length; i++) {
+          for(let prop in standard) {
+            if (list[i][prop] == undefined) {
+              list[i][prop] = standard[prop]
+            }
+          }
+        }
+        return list.slice(0)
       }
     },
     methods: {

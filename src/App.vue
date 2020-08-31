@@ -167,7 +167,22 @@ export default {
             "placeholder": "请输入姓名",
             "rules": [],
             "key": "name",
-            "subtype": "text"
+            "subtype": "text",
+            "prepend": {
+              "name": "el-button",
+              "attrs": {
+                "type": "success"
+              },
+              "content": "按钮1",
+              "slot": ""
+            },
+            "append": {
+              "name": "el-button",
+              "attrs": {
+                "type": "success"
+              },
+              "content": "按钮1"
+            },
           },
           {
             "type": "select",

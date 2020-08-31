@@ -1,21 +1,34 @@
 <template>
-  <el-col :span="item.span || span">
-    <el-form-item class="dynamicFormItem" :rules="item.Rules" :label="item.label" :prop="item.key">
+  <el-col :span="span">
+    <el-form-item class="dynamicFormItem" :label="item.label" :prop="item.key">
+      <!-- 自定义组件 item.component是一个自定义的全局组件名 -->
       <component
         @input="componentInput"
         v-if="item.type == 'formatter'"
         :is="item.component">
       </component>
 
+      <!-- element组件 -->
       <el-input
         v-if="item.type==='input'"
+        :type="item.subtype"
         v-bind="$attrs"
         v-on="$listeners"
-        :type="item.subtype"
-        :placeholder="item.placeholder"
-        :disabled="item.disable"
-        :readonly="item.readonly"
-        :autosize="item.autosize">
+        >
+        <component
+          v-bind="item.prepend.attrs"
+          v-if="item.prepend"
+          :is="item.prepend.name"
+          slot="prepend">
+          {{item.prepend.content}}
+        </component>
+        <component
+          v-bind="item.append.attrs"
+          v-if="item.append"
+          :is="item.append.name"
+          slot="append">
+          {{item.append.content}}
+        </component>
       </el-input>
       <el-select
         @visible-change="visibleChange"
@@ -91,6 +104,9 @@
         collapse-tags
         clearable>
       </el-cascader>
+      <!-- element组件 -->
+
+      <!-- 无法识别的组件提示 -->
       <span v-else>未知控件类型</span>
     </el-form-item>
   </el-col>
@@ -109,8 +125,10 @@
         type: Array,
         required: true
       },
+      // 每个表单元素在栅格化系统中所占的列数
       span: {
-        type: Number,  // 每个表单元素在栅格化系统中所占的列数
+        type: Number,
+        default: 8
       }
     },
     data(){
