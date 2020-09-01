@@ -66,22 +66,24 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App',
       params: 0,
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
+      options: [
+        {
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }
+      ],
       value: '',
 
 
@@ -159,7 +161,7 @@ export default {
       formConfig: {
         "formItemList": [
           {
-            "type": "input",
+            "componentName": "el-input",
             "label": "姓名",
             "disable": false,
             "readonly": false,
@@ -167,15 +169,15 @@ export default {
             "placeholder": "请输入姓名",
             "rules": [],
             "key": "name",
-            "subtype": "text",
-            "prepend": {
+            "type": "text",
+            /*"prepend": {
               "name": "el-button",
               "attrs": {
                 "type": "success"
               },
               "content": "按钮1",
               "slot": ""
-            },
+            },*/
             "append": {
               "name": "el-button",
               "attrs": {
@@ -185,7 +187,7 @@ export default {
             },
           },
           {
-            "type": "select",
+            "componentName": "el-select",
             "label": "来源",
             "multiple": false,
             "multipleLimit": 3,
@@ -199,7 +201,7 @@ export default {
             ]
           },
           {
-            "type": "radio",
+            "componentName": "el-radio",
             "label": "性别",
             "value": "",
             "button": false,
@@ -220,7 +222,7 @@ export default {
             ]
           },
           {
-            "type": "checkbox",
+            "componentName": "el-checkbox",
             "label": "爱好",
             "value": ['1', '2'],
             "button": true,
@@ -248,7 +250,7 @@ export default {
             ]
           },
           {
-            "type": "cascader",
+            "componentName": "el-cascader",
             "label": "城市",
             "value": [],
             "rules": [],

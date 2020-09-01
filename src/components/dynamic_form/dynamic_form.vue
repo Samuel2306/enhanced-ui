@@ -7,9 +7,10 @@
       <dynamic-form-item
         :ref="item.key + ts"
         :span="span * item.cols"
-        v-for="item in formItemList"
+        v-for="(item, index) in formItemList"
+        :componentIndex="index"
         :key="item.key"
-        :item="item"
+        v-bind="transformItem(item)"
         :formItemList="formItemList"
         :value="formData[item.key]"
         @input="handleInput($event, item.key)"
@@ -109,6 +110,10 @@
       }
     },
     methods: {
+      transformItem(item){
+        console.log(item)
+        return item
+      },
       handleInput(val, key) {
         // 这里element-ui没有上报event，直接就是value了,  val原来是$event对象
         this.formData = { ...this.formData, [key]: val }

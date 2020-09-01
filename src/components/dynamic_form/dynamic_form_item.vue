@@ -1,20 +1,19 @@
 <template>
   <el-col :span="span">
     <el-form-item class="dynamicFormItem" :label="item.label" :prop="item.key">
+
       <!-- 自定义组件 item.component是一个自定义的全局组件名 -->
       <component
-        @input="componentInput"
-        v-if="item.type == 'formatter'"
-        :is="item.component">
+        :is="$attrs.componentName"
+        v-if="$attrs.type == 'formatter'"
+        @input="componentInput">
       </component>
 
       <!-- element组件 -->
       <el-input
-        v-if="item.type==='input'"
-        :type="item.subtype"
+        v-if="$attrs.componentName==='el-input'"
         v-bind="$attrs"
-        v-on="$listeners"
-        >
+        v-on="$listeners">
         <component
           v-bind="item.prepend.attrs"
           v-if="item.prepend"
@@ -30,15 +29,17 @@
           {{item.append.content}}
         </component>
       </el-input>
+
+
       <el-select
-        @visible-change="visibleChange"
-        @change="changeSelect($event,item)"
-        v-else-if="item.type==='select'"
+        v-else-if="$attrs.componentName==='el-select'"
         v-bind="$attrs"
         v-on="$listeners"
         :multiple="item.multiple"
         :disabled="item.disabled"
-        :multiple-limit="item.multipleLimit">
+        :multiple-limit="item.multipleLimit"
+        @visible-change="visibleChange"
+        @change="changeSelect($event,item)">
         <el-option
           v-for="o in (item.options || [])"
           :key="o.value"
@@ -47,8 +48,10 @@
           :disabled="o.disabled">
         </el-option>
       </el-select>
+
+
       <el-radio-group
-        v-else-if="item.type==='radio'"
+        v-else-if="item.componentName==='el-radio'"
         v-bind="$attrs"
         v-on="$listeners"
         :disabled="item.disable"
@@ -71,7 +74,7 @@
         </el-radio>
       </el-radio-group>
       <el-checkbox-group
-        v-else-if="item.type==='checkbox'"
+        v-else-if="item.componentName==='el-checkbox'"
         v-bind="$attrs" v-on="$listeners"
         :max="item.max"
         :min="item.min"
@@ -96,7 +99,7 @@
       </el-checkbox-group>
 
       <el-cascader
-        v-else-if="item.type==='cascader'"
+        v-else-if="item.componentName==='el-cascader'"
         :options="item.options"
         :props="item.props"
         @change="componentInput"
@@ -117,10 +120,6 @@
   export default {
     name: "DynamicFormItem",
     props: {
-      item: {
-        type: Object,
-        required: true
-      },
       formItemList: {
         type: Array,
         required: true
@@ -129,6 +128,14 @@
       span: {
         type: Number,
         default: 8
+      }
+    },
+    computed: {
+      componentIndex(){
+        return this.$attrs.componentIndex || 0
+      },
+      item(){
+        return this.formItemList[this.componentIndex] || {}
       }
     },
     data(){
@@ -176,7 +183,6 @@
           this.item.getOptionsFunc && this.item.getOptionsFunc(this.item, this.formItemList)
         }
       })
-      console.log(this.$attrs.name)
     }
   }
 </script>
